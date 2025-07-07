@@ -5,7 +5,8 @@ class LoginProvider extends ChangeNotifier {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  final formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+
 
   // Validation status (optional if you want UI state management)
   bool isLoading = false;
@@ -18,7 +19,7 @@ class LoginProvider extends ChangeNotifier {
 
   // Validate Form
   bool validateForm() {
-    return formKey.currentState?.validate() ?? false;
+    return loginFormKey.currentState?.validate() ?? false;
   }
 
   // Submit Login
@@ -32,7 +33,7 @@ class LoginProvider extends ChangeNotifier {
       // Simulate login delay or perform API call
       await Future.delayed(const Duration(seconds: 2));
 
-        Navigator.pushReplacementNamed(context, '/signup');
+        Navigator.pushReplacementNamed(context, '/bottomNavContainer');
 
       // Navigate to home or dashboard, etc.
     } catch (e) {

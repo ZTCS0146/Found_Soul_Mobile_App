@@ -43,11 +43,11 @@ class SignupScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       CustomTextField(
-                        hintText: "Full Name",
+                        hintText: "UserName",
                         controller: provider.nameController,
                         validator: (value) =>
                             value == null || value.trim().isEmpty
-                                ? "Name is required"
+                                ? "UserName is required"
                                 : null,
                       ),
                       SizedBox(height: 16.h),
@@ -160,135 +160,5 @@ class SignupScreen extends StatelessWidget {
   );
 }
   }
-    // return Scaffold(
-    //     body: SafeArea(
-    //         child: Padding(
-    //             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
-    //             child: SingleChildScrollView(
-    //                 child: Form(
-    //                     key: provider.formKey,
-    //                     child: Column(
-    //                         crossAxisAlignment: CrossAxisAlignment.start,
-    //                         mainAxisAlignment: MainAxisAlignment.center,
-    //                         children: [
-    //                           SizedBox(
-    //                               height: MediaQuery.of(context).size.height *
-    //                                   0.02),
-
-    //                           Text(
-    //                             "Sign Up",
-    //                             style: AppTheme.heading1,
-    //                           ),
-    //                           SizedBox(height: 8.h),
-    //                           Text(
-    //                             "Kindly provide your details in the fields below",
-    //                             style: AppTheme.heading2,
-    //                           ),
-    //                           SizedBox(height: 40.h),
-    //                           CustomTextField(
-    //                             hintText: "Full Name",
-    //                             controller: provider.nameController,
-    //                             validator: (value) =>
-    //                                 value == null || value.trim().isEmpty
-    //                                     ? "Name is required"
-    //                                     : null,
-    //                           ),
-    //                           SizedBox(height: 16.h),
-
-    //                           CustomTextField(
-    //                               hintText: "Phone",
-    //                               controller: provider.phoneController,
-    //                               keyboardType: TextInputType.phone,
-    //                               validator: (value) {
-    //                                 if (value == null || value.trim().isEmpty) {
-    //                                   return "Phone is required";
-    //                                 } else if (!RegExp(r'^\d{10}$')
-    //                                     .hasMatch(value)) {
-    //                                   return "Phone must be 10 digits";
-    //                                 }
-    //                                 return null;
-    //                               }),
-    //                           SizedBox(height: 16.h),
-
-    //                           CustomTextField(
-    //                             hintText: "Email",
-    //                             controller: provider.emailController,
-    //                             keyboardType: TextInputType.emailAddress,
-    //                             validator: (value) {
-    //                               if (value == null || value.trim().isEmpty) {
-    //                                 return "Email is required";
-    //                               } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
-    //                                   .hasMatch(value)) {
-    //                                 return "Enter a valid email";
-    //                               }
-    //                               return null;
-    //                             },
-    //                           ),
-    //                           SizedBox(height: 16.h),
-
-    //                           CustomTextField(
-    //                             hintText: "Gender",
-    //                             controller: provider.genderController,
-    //                             validator: (value) =>
-    //                                 value == null || value.trim().isEmpty
-    //                                     ? "Gender is required"
-    //                                     : null,
-    //                           ),
-    //                           SizedBox(height: 16.h),
-
-    //                           CustomTextField(
-    //                             hintText: "Password",
-    //                             controller: provider.passwordController,
-    //                             isPassword: true,
-    //                             obscureText: true,
-    //                             validator: (value) {
-    //                               if (value == null || value.length < 6) {
-    //                                 return "Password must be at least 6 characters";
-    //                               }
-    //                               return null;
-    //                             },
-    //                           ),
-    //                           SizedBox(height: 16.h),
-
-    //                           CustomTextField(
-    //                             hintText: "Confirm Password",
-    //                             controller: provider.confirmPasswordController,
-    //                             isPassword: true,
-    //                             obscureText: true,
-    //                             validator: (value) {
-    //                               if (value !=
-    //                                   provider.passwordController.text) {
-    //                                 return "Passwords do not match";
-    //                               }
-    //                               return null;
-    //                             },
-    //                           ),
-    //                           SizedBox(height: 16.h),
-
-    //                           appButton("Sign Up", () {
-    //                             Provider.of<SignUpProvider>(context,
-    //                                     listen: false)
-    //                                 .submit();
-    //                           }),
-    //                           SizedBox(height: 20.h),
-    //                           // Bottom Text
-    //                           Center(
-    //                             child: RichText(
-    //                               text: TextSpan(
-    //                                 text: "Already have an account? ",
-    //                                 style:
-    //                                     AppTheme.caption.copyWith(fontSize: 14),
-    //                                 children: [
-    //                                   TextSpan(
-    //                                     text: "Log In",
-    //                                     style: AppTheme.caption.copyWith(
-    //                                         fontSize: 14,
-    //                                         color: AppTheme.buttonColor),
-    //                                   ),
-    //                                 ],
-    //                               ),
-    //                             ),
-    //                           ),
-    //                         ]))))));
   
 

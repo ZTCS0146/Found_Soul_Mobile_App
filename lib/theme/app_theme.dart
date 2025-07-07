@@ -5,14 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppTheme {
   // 🔹 Colors
-  static const Color primaryColor = Color(0xFF0A73B7);
-  static const Color secondaryColor = Color(0xFFF57C00);
+  static const Color primaryColor = Colors.black;
+  static const Color secondaryColor = Color(0xFF47FF46);
   static const Color backgroundColor = Colors.black;
   static const Color textPrimary = Color(0xFFFFFFFF);
   static const Color textSecondary = Color(0xFF696969);
   static const Color buttonColor = Color(0xFF46FC50);
   static const Color buttonSecondaryColor = Color(0xFFFFFFFF);
    static const Color errorColor=Colors.redAccent;
+static const Color cardColor = Color(0xFF121212);
   // 🔹 Sizes
   static const double padding = 16.0;
   static const double spacing = 12.0;
@@ -39,25 +40,47 @@ class AppTheme {
     color: textPrimary,
   );
 
-  static const TextStyle caption = TextStyle(
-    fontSize: 16,
+  static  TextStyle caption = TextStyle(
+    fontSize: 16.sp,
    color: buttonSecondaryColor,
     fontFamily: 'Anton',
     fontWeight: FontWeight.w400,
   );
-    static const TextStyle subcaption = TextStyle(
-    fontSize: 12,
+    static  TextStyle subcaption = TextStyle(
+    fontSize: 12.sp,
    color: buttonSecondaryColor,
     fontFamily: 'Anton',
     fontWeight: FontWeight.w400,
   );
-    static const TextStyle buttonText = TextStyle(
-    fontSize: 20,
+    static  TextStyle buttonText = TextStyle(
+    fontSize: 20.sp,
     color: buttonSecondaryColor,
     fontFamily: 'Anton',
     fontWeight: FontWeight.w400,
     
   );
+    static  TextStyle tabBarTitle = TextStyle(
+    fontSize: 14.sp,
+    color: buttonSecondaryColor,
+    fontFamily: 'RobotoBold',
+    fontWeight: FontWeight.w700,
+    
+  );  
+   static  TextStyle eventListTitle = TextStyle(
+    fontSize: 18.sp,
+    color: buttonSecondaryColor,
+    fontFamily: 'RobotoExtraBold',
+    fontWeight: FontWeight.w800,
+    
+  );  
+
+     static  TextStyle eventListSubTitle = TextStyle(
+    fontSize: 12.sp,
+    color: buttonSecondaryColor,
+    fontFamily: 'RobotoMedium',
+    fontWeight: FontWeight.w500,
+    
+  );  
 
   // 🔹 ThemeData
   static ThemeData get lightTheme => ThemeData(

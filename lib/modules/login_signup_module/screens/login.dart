@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/helper_widget/app_button.dart';
 import 'package:found_soul_mobile_app/helper_widget/social_buttons.dart';
 import 'package:found_soul_mobile_app/helper_widget/textformfield_widget.dart';
+import 'package:found_soul_mobile_app/modules/login_signup_module/providers/forgotpwd_provider.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/providers/login_provider.dart';
+import 'package:found_soul_mobile_app/modules/profile/screens/change_password.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +23,7 @@ class LoginScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 24.w,vertical: 32.h),
           child: SingleChildScrollView(
             child: Form(
-  key: loginProvider.formKey,
+  key: loginProvider.loginFormKey,
   child:
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,7 +79,7 @@ class LoginScreen extends StatelessWidget {
             
                 InkWell(
                   onTap: (){
-                                            Navigator.pushReplacementNamed(context, '/login');
+                                            Navigator.pushReplacementNamed(context, '/forgot');
 
                   },
                   child: Align(
@@ -113,9 +115,9 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    socialButton("Apple"),
+                    socialButton("Apple",Icons.apple),
                     SizedBox(width: 16.w),
-                    socialButton("Google"),
+                    socialButton("Google",Icons.g_mobiledata),
                    
                   ],
                 ),
@@ -124,7 +126,8 @@ class LoginScreen extends StatelessWidget {
                 // Bottom Text
                 InkWell(
                   onTap: (){
-                                            Navigator.pushReplacementNamed(context, '/forgot');
+    
+    Navigator.pushReplacementNamed(context, '/signup');
 
                   },
                   child: Center(

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
 
-Widget socialButton(String buttonText){
+Widget socialButton(String buttonText,IconData icon){
   return
 Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () {},
-                        icon: const Icon(Icons.apple, color: Colors.white),
+                        icon:  Icon(icon, color: Colors.white),
                         label: Text(
                          buttonText,
                           style:AppTheme.caption

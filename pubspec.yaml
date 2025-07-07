@@ -37,6 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.1.5
   flutter_screenutil: ^5.9.3
+  webview_flutter: ^4.8.0
+  country_state_city_picker_2: ^1.0.5
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +84,19 @@ flutter:
     - family: Roboto
       fonts:
         - asset: assets/fonts/Roboto-Regular.ttf
-  #
+    - family: RobotoBold
+      fonts:
+        - asset: assets/fonts/Roboto-Bold.ttf
+    - family: RobotoExtraBold
+      fonts:
+        - asset: assets/fonts/Roboto-ExtraBold.ttf
+    - family: RobotoMedium
+      fonts:
+        - asset: assets/fonts/Roboto-Medium.ttf
+    - family: CustomIcons
+      fonts:
+        - asset: assets/fonts/CustomIcons.ttf
+    
+  
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

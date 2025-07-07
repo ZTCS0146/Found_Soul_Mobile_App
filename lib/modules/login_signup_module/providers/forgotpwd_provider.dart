@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ChangePasswordProvider extends ChangeNotifier {
-  final formKey = GlobalKey<FormState>();
+  
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+final GlobalKey<FormState> formForgotKey = GlobalKey<FormState>();
 
   bool isLoading = false;
 
   void submitChangePassword(BuildContext context) {
-    if (!formKey.currentState!.validate()) return;
+    if (!formForgotKey.currentState!.validate()) return;
 
     isLoading = true;
     notifyListeners();

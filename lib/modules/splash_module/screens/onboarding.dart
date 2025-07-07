@@ -50,7 +50,7 @@ class OnboardingScreen extends StatelessWidget {
                   ),
                 ),
             
-                const Text(
+                 Text(
                   'ENTER',
                   style: AppTheme.buttonText,
                 ),

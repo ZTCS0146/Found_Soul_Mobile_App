@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:found_soul_mobile_app/modules/bottom_navigation/screens/bottom_navigation.dart';
+import 'package:found_soul_mobile_app/modules/event_module/screens/event_details.dart';
+import 'package:found_soul_mobile_app/modules/event_module/screens/tab_bar_screen.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/providers/forgotpwd_provider.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/providers/login_provider.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/providers/signup_provider.dart';
-import 'package:found_soul_mobile_app/modules/login_signup_module/screens/forgot_password.dart';
+import 'package:found_soul_mobile_app/modules/profile/screens/change_password.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/screens/login.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/screens/signup.dart';
 import 'package:found_soul_mobile_app/modules/splash_module/screens/onboarding.dart';
@@ -46,7 +49,10 @@ class MyApp extends StatelessWidget {
             '/onboarding': (_) => const OnboardingScreen(),
           '/login':(_)=>LoginScreen(),
           '/signup':(_)=>SignupScreen(),
-          '/forgot':(_)=>ChangePasswordScreen()
+          '/changepassword':(_)=>ChangePasswordScreen(),
+          "/event":(context) => EventScreen(),
+          "/eventdetails":(context) =>  EventDetailsScreen(),
+        "/bottomNavContainer":(context) =>   BottomNavContainer()
           },
           home: child,
         );
