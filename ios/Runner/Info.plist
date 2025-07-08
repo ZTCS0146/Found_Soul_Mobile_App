@@ -48,5 +48,11 @@
 	<true/>
 	<key>NSAllowsArbitraryLoads</key>
     <true/>
+	<key>NSCameraUsageDescription</key>
+    <string>We need camera access to update your profile picture.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need photo library access to select your profile picture.</string>
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
 </dict>
 </plist>

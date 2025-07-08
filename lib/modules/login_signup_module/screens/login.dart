@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/helper_widget/app_button.dart';
 import 'package:found_soul_mobile_app/helper_widget/social_buttons.dart';
 import 'package:found_soul_mobile_app/helper_widget/textformfield_widget.dart';
-import 'package:found_soul_mobile_app/modules/login_signup_module/providers/forgotpwd_provider.dart';
+import 'package:found_soul_mobile_app/modules/profile/provider/changepwd_provider.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/providers/login_provider.dart';
 import 'package:found_soul_mobile_app/modules/profile/screens/change_password.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
@@ -79,7 +79,7 @@ class LoginScreen extends StatelessWidget {
             
                 InkWell(
                   onTap: (){
-                                            Navigator.pushReplacementNamed(context, '/forgot');
+                                            Navigator.pushReplacementNamed(context, '/forgotPassword');
 
                   },
                   child: Align(

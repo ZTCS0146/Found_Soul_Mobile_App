@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/helper_widget/app_button.dart';
 import 'package:found_soul_mobile_app/helper_widget/social_buttons.dart';
+import 'package:found_soul_mobile_app/helper_widget/state_drop_down.dart';
 import 'package:found_soul_mobile_app/helper_widget/textformfield_widget.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/providers/signup_provider.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
@@ -15,7 +16,7 @@ class SignupScreen extends StatelessWidget {
 
   final provider = Provider.of<SignUpProvider>(context);
   return Scaffold(
-    backgroundColor: Colors.black,
+    // backgroundColor: Colors.black,
     body: SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
@@ -92,8 +93,21 @@ class SignupScreen extends StatelessWidget {
                                 : null,
                       ),
                       SizedBox(height: 16.h),
-
-                      CustomTextField(
+CustomDropdownField(
+          hintText: 'Select State',
+          value: provider.selectedState,
+          items: provider.usStates,
+          onChanged: (val) {
+            provider.setSelectedState(val);
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please select a state';
+            }
+            return null;
+          },
+        ),     SizedBox(height: 16.h),
+                    CustomTextField(
                         hintText: "Password",
                         controller: provider.passwordController,
                         isPassword: true,
@@ -105,6 +119,9 @@ class SignupScreen extends StatelessWidget {
                           return null;
                         },
                       ),
+
+
+
                       SizedBox(height: 16.h),
 
                       CustomTextField(

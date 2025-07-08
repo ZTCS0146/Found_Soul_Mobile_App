@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/custom_icon/custom_icons_icons.dart';
 import 'package:found_soul_mobile_app/modules/event_module/screens/tab_bar_screen.dart';
 import 'package:found_soul_mobile_app/modules/iframe_module/screens/playlist.dart';
+import 'package:found_soul_mobile_app/modules/map_module/screens/map.dart';
 import 'package:found_soul_mobile_app/modules/profile/screens/profile.dart';
 import 'package:found_soul_mobile_app/modules/iframe_module/screens/shop.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
@@ -20,7 +21,7 @@ class _BottomNavContainerState extends State<BottomNavContainer> {
   final List<Widget> pages =  [
     EventScreen(),
     ShopWebViewPage(),
-    EventScreen(),
+    MapScreen(),
     PlaylistWebViewPage(),
     ProfileScreen()
   ];

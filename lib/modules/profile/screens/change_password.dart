@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/helper_widget/app_button.dart';
+import 'package:found_soul_mobile_app/helper_widget/appbar.dart';
 import 'package:found_soul_mobile_app/helper_widget/textformfield_widget.dart';
-import 'package:found_soul_mobile_app/modules/login_signup_module/providers/forgotpwd_provider.dart';
+import 'package:found_soul_mobile_app/modules/profile/provider/changepwd_provider.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 
 class ChangePasswordScreen extends StatelessWidget {
-  const ChangePasswordScreen({super.key});
+   ChangePasswordScreen({super.key,  required this.forgotPassword});
+
+   bool forgotPassword=false;
 
   @override
   Widget build(BuildContext context) {
     final forgotProvider = Provider.of<ChangePasswordProvider>(context);
 
     return Scaffold(
-      
+      appBar:forgotPassword==true? CustomAppBar(title: "New Password",showBackButton: true,):null,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
         child: Column(
@@ -23,8 +26,19 @@ class ChangePasswordScreen extends StatelessWidget {
           children: [
             Padding(
               padding:  EdgeInsets.symmetric(vertical: 32.sp),
-              child: Center(child: Text('Change Password', style: AppTheme.heading1)),
+              child: Center(child: Text(forgotPassword==true?
+            'New Password':    'Change Password', style: AppTheme.heading1)),
             ),
+            forgotPassword==true?    SizedBox(height: 8.h):Container(),
+
+
+                          forgotPassword==true?  Text(
+                  "Verification code sent to xyz@gmail.com",
+                   style: AppTheme.heading2):Container(),
+                          
+                
+             forgotPassword==true?    SizedBox(height: 8.h):Container(),
+                     
             CustomTextField(
               hintText: "Password",
               controller: forgotProvider.passwordController,

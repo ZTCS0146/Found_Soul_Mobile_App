@@ -4,14 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/custom_icon/custom_icons_icons.dart';
 import 'package:found_soul_mobile_app/helper_widget/appbar.dart';
+import 'package:found_soul_mobile_app/modules/profile/provider/profile_provider.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+     final profileProvider = Provider.of<ProfileProvider>(context);
+
     return Scaffold(
       // backgroundColor: Colors.black,
-      appBar: CustomAppBar(title: 'Profile',showBackButton :false),
+      appBar: CustomAppBar(title: 'Profile',showBackButton :false,
+        actions: [
+            IconButton(
+              icon:  Icon(Icons.notifications_none, color: AppTheme.textPrimary),
+              onPressed: () {},
+            ),
+          ],
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
@@ -25,16 +37,7 @@ class ProfileScreen extends StatelessWidget {
                        backgroundColor: AppTheme.textSecondary,
                   backgroundImage: null, // Replace with NetworkImage(...) for real photo
                 ),
-                Positioned(
-                  // bottom: 50,
-                  right: 45.sp,
-                  // top:90,
-                  child: CircleAvatar(
-                    radius: 14.r,
-                    backgroundColor: AppTheme.buttonColor,
-                    child: Icon(CustomIcons.edit, size: 14.sp, color: AppTheme.backgroundColor),
-                  ),
-                )
+               
               ],
             ),
             SizedBox(height: 30.h),
@@ -74,7 +77,14 @@ Widget actionCard(BuildContext context) {
          Navigator.pushNamed(context, '/changepassword');
         }),
         _divider(),
-        _actionRow("Logout",(){}),
+      
+        _actionRow("Edit Profile",(){
+         Navigator.pushNamed(context, '/editProfile');
+     
+      
+        }),
+            _divider(),
+             _actionRow("Logout",(){}),
       ],
     ),
   );
