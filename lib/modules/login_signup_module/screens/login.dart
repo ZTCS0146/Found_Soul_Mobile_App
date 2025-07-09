@@ -79,7 +79,7 @@ class LoginScreen extends StatelessWidget {
             
                 InkWell(
                   onTap: (){
-                                            Navigator.pushReplacementNamed(context, '/forgotPassword');
+                                            Navigator.pushNamed(context, '/forgotPassword');
 
                   },
                   child: Align(
