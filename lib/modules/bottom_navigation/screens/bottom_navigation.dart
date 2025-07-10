@@ -62,11 +62,7 @@ class CustomBottomNavBar extends StatelessWidget {
                CustomIcons.location,
                Icons.video_collection_outlined,
                  CustomIcons.profile,
-      // Icons.star,
-      // Icons.storefront,
-      // Icons.location_on,
-      // Icons.video_collection_outlined,
-      // Icons.person_outline,
+    
     ];
 
     return Container(
