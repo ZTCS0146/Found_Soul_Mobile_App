@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginProvider extends ChangeNotifier {
   // Controllers
@@ -10,7 +12,7 @@ class LoginProvider extends ChangeNotifier {
 
   // Validation status (optional if you want UI state management)
   bool isLoading = false;
-
+  bool isSignOutLoading = false;
   // Dispose method
   void disposeControllers() {
     emailController.dispose();
@@ -66,4 +68,78 @@ class LoginProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+
+
+
+Future<void> signInWithGoogle(BuildContext context) async {
+  try {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+    if (googleUser == null) {
+      // User canceled the sign-in
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign-in cancelled')),
+      );
+      return;
+    }
+
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    final User? user = userCredential.user;
+
+    if (user != null) {
+      Navigator.pushReplacementNamed(context, '/bottomNavContainer');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign-in failed')),
+      );
+    }
+  } catch (e) {
+    print('Google Sign-In Error: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: ${e.toString()}')),
+    );
+  }
+}
+Future<void> signOutUser(BuildContext context) async {
+  isSignOutLoading = true;
+  notifyListeners(); // Start loader
+
+  try {
+    final googleSignIn = GoogleSignIn();
+    
+    // Sign out from Google if signed in
+    if (await googleSignIn.isSignedIn()) {
+      await googleSignIn.signOut();
+    }
+
+    // Firebase sign out
+    await FirebaseAuth.instance.signOut();
+
+    // Navigate to login screen
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+  } catch (e) {
+    print('Sign out error: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Logout failed: ${e.toString()}')),
+    );
+  } finally {
+    isSignOutLoading = false;
+    notifyListeners(); // Stop loader
+  }
+}
+
+
+
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>215020299220-nk5fksbog2jkr12d32p71hbeapuq7tqn.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.215020299220-nk5fksbog2jkr12d32p71hbeapuq7tqn</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>215020299220-3f7f51hjc8qjrdukpk9te8itju436u3c.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDLXL-eqG13Ab25C4fjg7V0QmT5VeeISkM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>215020299220</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.foundSoulMobileApp</string>
+	<key>PROJECT_ID</key>
+	<string>foundsoulsofficial-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>foundsoulsofficial-app.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:215020299220:ios:da106b7eb1252266942c41</string>
+</dict>
+</plist>

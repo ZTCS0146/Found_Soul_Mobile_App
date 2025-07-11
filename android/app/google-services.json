@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "215020299220",
+    "project_id": "foundsoulsofficial-app",
+    "storage_bucket": "foundsoulsofficial-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:215020299220:android:867c52bac594ec05942c41",
+        "android_client_info": {
+          "package_name": "com.example.found_soul_mobile_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "215020299220-3f7f51hjc8qjrdukpk9te8itju436u3c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.found_soul_mobile_app",
+            "certificate_hash": "8b1e48934ff5ee5364f85ad34f0c9ad54e799074"
+          }
+        },
+        {
+          "client_id": "215020299220-ne05nd26bkaardrnnsqtdkr6gll2bkmg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxQvTySPApMtcTM-Q4aaxf2MwjsznvxLw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "215020299220-ne05nd26bkaardrnnsqtdkr6gll2bkmg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "215020299220-nk5fksbog2jkr12d32p71hbeapuq7tqn.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.foundSoulMobileApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

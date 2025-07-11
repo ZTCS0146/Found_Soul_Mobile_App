@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/custom_icon/custom_icons_icons.dart';
 import 'package:found_soul_mobile_app/helper_widget/appbar.dart';
+import 'package:found_soul_mobile_app/modules/login_signup_module/providers/login_provider.dart';
 import 'package:found_soul_mobile_app/modules/profile/provider/profile_provider.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,14 +14,16 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
      final profileProvider = Provider.of<ProfileProvider>(context);
-
+final loginProvider = Provider.of<LoginProvider>(context, listen: false);
     return Scaffold(
       // backgroundColor: Colors.black,
       appBar: CustomAppBar(title: 'Profile',showBackButton :false,
         actions: [
             IconButton(
               icon:  Icon(Icons.notifications_none, color: AppTheme.textPrimary),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/notification');
+              },
             ),
           ],
       ),
@@ -52,7 +55,7 @@ class ProfileScreen extends StatelessWidget {
     _combinedInfoCard(),
 
     // 👇 Bottom actions
-   actionCard(context)
+   actionCard(context,loginProvider)
   ],
 )
 
@@ -62,7 +65,7 @@ class ProfileScreen extends StatelessWidget {
     
     );
   }
-Widget actionCard(BuildContext context) {
+Widget actionCard(BuildContext context,LoginProvider loginProvider) {
   return Container(
     width: double.infinity,
     margin: EdgeInsets.only(bottom: 20.h),
@@ -84,7 +87,10 @@ Widget actionCard(BuildContext context) {
       
         }),
             _divider(),
-             _actionRow("Logout",(){}),
+             _actionRow("Logout",(){
+              
+              loginProvider.signOutUser(context);
+             }),
       ],
     ),
   );

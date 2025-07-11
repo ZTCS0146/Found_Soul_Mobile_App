@@ -115,9 +115,13 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    socialButton("Apple",Icons.apple),
+                    socialButton("Apple",Icons.apple,() {
+         loginProvider.login(context);
+}),
                     SizedBox(width: 16.w),
-                    socialButton("Google",Icons.g_mobiledata),
+                    socialButton("Google",Icons.g_mobiledata,() {
+         loginProvider.signInWithGoogle(context);
+}),
                    
                   ],
                 ),

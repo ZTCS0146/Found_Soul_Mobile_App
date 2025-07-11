@@ -19,7 +19,9 @@ class EventScreen extends StatelessWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.notifications_none, color: AppTheme.textPrimary),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/notification');
+              },
             ),
           ],
             bottom: PreferredSize(
