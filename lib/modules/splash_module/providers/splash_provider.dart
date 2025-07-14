@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:found_soul_mobile_app/util/shared_preference.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,8 +33,8 @@ class SplashProvider with ChangeNotifier {
     try {
       final firebaseUser = FirebaseAuth.instance.currentUser;
       final googleUser = await googleSignIn.signInSilently();
-      final prefs = await SharedPreferences.getInstance();
-      final storedUid = prefs.getString('userId');
+
+      final storedUid = await getUserId();
 
       if (firebaseUser != null && storedUid != null) {
         //  Normal Firebase Login
@@ -42,7 +43,7 @@ class SplashProvider with ChangeNotifier {
         //Google Login
         Navigator.pushReplacementNamed(context!, '/bottomNavContainer');
       } else {
-        // ❌ Not logged in
+        //  Not logged in
         Navigator.pushReplacementNamed(context!, '/onboarding');
       }
     } catch (e) {

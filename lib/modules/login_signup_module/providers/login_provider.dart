@@ -63,17 +63,17 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
         Navigator.pushReplacementNamed(context, '/bottomNavContainer');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("⚠️ User data not found.")),
+          SnackBar(content: Text(" User data not found.")),
         );
       }
     } on FirebaseAuthException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("❌ Login failed: ${e.message}")),
+        SnackBar(content: Text(" Login failed: ${e.message}")),
       );
     } catch (e) {
       debugPrint('Login error: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("⚠️ Unexpected error occurred.")),
+        SnackBar(content: Text(" Unexpected error occurred.")),
       );
     } finally {
       isLoading = false;
@@ -147,33 +147,6 @@ Future<void> signInWithGoogle(BuildContext context) async {
 }
  
 
-Future<void> signOutUser(BuildContext context) async {
-  isSignOutLoading = true;
-  notifyListeners(); // Start loader
-
-  try {
-    final googleSignIn = GoogleSignIn();
-    
-    // Sign out from Google if signed in
-    if (await googleSignIn.isSignedIn()) {
-      await googleSignIn.signOut();
-    }
-
-    // Firebase sign out
-    await FirebaseAuth.instance.signOut();
-
-    // Navigate to login screen
-    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
-  } catch (e) {
-    print('Sign out error: $e');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Logout failed: ${e.toString()}')),
-    );
-  } finally {
-    isSignOutLoading = false;
-    notifyListeners(); // Stop loader
-  }
-}
 
 
 

@@ -27,7 +27,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     return Scaffold(
       // backgroundColor: Colors.black,
-      appBar: CustomAppBar(title: 'Edit Profile',showBackButton :false,
+      appBar: const CustomAppBar(title: 'Edit Profile',showBackButton :false,
      
       ),
     
@@ -45,13 +45,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       clipBehavior: Clip.none, // 👈 Allow overflow
 
                   alignment: Alignment.center,
-                  children: [
-                    CircleAvatar(
+                  children: [profileProvider.imageFile != null?  CircleAvatar(
                       radius: 55.r,
-                      backgroundImage: profileProvider.imageFile != null
-                        ? FileImage(profileProvider.imageFile!)
-                        : const AssetImage("") as ImageProvider,
-                  ),
+                      backgroundImage:
+                        FileImage(profileProvider.imageFile!),
+                  ):
+                    CircleAvatar(
+                      radius: 55.r,child: Icon(Icons.person, size: 60.sp, color: AppTheme.textPrimary),),
+                  
                   Positioned(
                     bottom: -16.h,
                     child: GestureDetector(
@@ -77,7 +78,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               /// Name field
                 CustomTextField(
                                   hintText: "Email",
-                                  controller: profileProvider.nameController,
+                                  controller: profileProvider.emailController,
                                   keyboardType: TextInputType.emailAddress,
                                  
                                 ),
@@ -86,46 +87,49 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             
           
               /// Gender dropdown
-              DropdownButtonFormField<String>(
-                value: profileProvider.selectedGender,
-                decoration: InputDecoration(
-                  hintText:"Gender" ,
-                  // labelText: "Gender",
-                  // labelStyle: const TextStyle(color: AppTheme.textPrimary),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: AppTheme.textSecondary),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-               focusedBorder: OutlineInputBorder(
-      borderSide: const BorderSide(color:AppTheme.textSecondary, width: 2),
+             /// Gender dropdown
+DropdownButtonFormField<String>(
+  value: profileProvider.genders.contains(profileProvider.selectedGender)
+      ? profileProvider.selectedGender
+      : null, // Fallback if value is invalid
+  decoration: InputDecoration(
+    hintText: "Gender",
+    enabledBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: AppTheme.textSecondary),
+      borderRadius: BorderRadius.circular(8.r),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(color: AppTheme.textSecondary, width: 2),
       borderRadius: BorderRadius.circular(8.r),
     ),
     border: OutlineInputBorder(
       borderSide: const BorderSide(color: AppTheme.primaryColor),
       borderRadius: BorderRadius.circular(8.r),
     ),
-                ),
-                style: const TextStyle(color: AppTheme.textPrimary),
-                dropdownColor: AppTheme.backgroundColor,
-                items:profileProvider.genders.map((gender) {
-                  return DropdownMenuItem<String>(
-                    value: gender,
-                    child: Text(gender),
-                  );
-                }).toList(),
-                onChanged: (val) {
-                  if (val != null) {
-                    setState(() {
-                   profileProvider.selectedGender = val;
-                    });
-                  }
-                },
-              ),
-          
+  ),
+  style: const TextStyle(color: AppTheme.textPrimary),
+  dropdownColor: AppTheme.backgroundColor,
+  items: profileProvider.genders.map((gender) {
+    return DropdownMenuItem<String>(
+      value: gender,
+      child: Text(gender),
+    );
+  }).toList(),
+  onChanged: (val) {
+    if (val != null) {
+      setState(() {
+        profileProvider.selectedGender = val;
+      });
+    }
+  },
+),
+
               SizedBox(height: 30.h),
           appButton("Save Details", () {
+            profileProvider.updateUserProfile();
 
-          },)
+          },
+          isLoading: profileProvider.isProfileUpdateLoading),
               /// Save button
            
             ],

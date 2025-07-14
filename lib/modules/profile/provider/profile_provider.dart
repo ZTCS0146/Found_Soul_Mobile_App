@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileProvider extends ChangeNotifier {
   // Form Key
@@ -12,6 +14,8 @@ class ProfileProvider extends ChangeNotifier {
 
   // Loading State
  bool isProfileLoading = false;
+  bool isProfileUpdateLoading = false;
+
   // Image State
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -52,7 +56,7 @@ class ProfileProvider extends ChangeNotifier {
 
       final data = Map<String, dynamic>.from(snap.value as Map);
 
-      // ✅ Populate your controllers and dropdown
+      // Populate your controllers and dropdown
       nameController.text = data['name'] ?? '';
       emailController.text = data['email'] ?? '';
       selectedGender = data['gender'] ?? 'Female';
@@ -67,13 +71,32 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
-  void disposeControllers() {
-    nameController.dispose();
-    emailController.dispose();
+Future<void> updateUserProfile() async {
+  try {
+    isProfileUpdateLoading = true;
+    notifyListeners();
+
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) throw Exception('User not logged in');
+
+    final updatedData = {
+      'name': nameController.text.trim(),
+      'email': emailController.text.trim(),
+      'gender': selectedGender,
+      'updatedAt': DateTime.now().toIso8601String(),
+    };
+
+    await FirebaseDatabase.instance.ref('users/$uid').update(updatedData);
+
+    debugPrint('User profile updated successfully.');
+  } catch (e) {
+    debugPrint(' Failed to update user profile: $e');
+    rethrow;
+  } finally {
+    isProfileUpdateLoading = false;
+    notifyListeners();
   }
-
-
-
+}
 
   /// Set loading state
   void setLoading(bool value) {
@@ -81,11 +104,37 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Dispose controllers
-  @override
-  void dispose() {
-    nameController.dispose();
-    emailController.dispose();
-    super.dispose();
+  // Logout function
+  Future<void> signOutUser(BuildContext context) async {
+  // isSignOutLoading = true;
+  notifyListeners(); // Start loader (optional for UI state)
+
+  try {
+    final googleSignIn = GoogleSignIn();
+
+    // 1.  Sign out from Google if signed in
+    if (await googleSignIn.isSignedIn()) {
+      await googleSignIn.signOut();
+    }
+
+    // 2.  Sign out from Firebase
+    await FirebaseAuth.instance.signOut();
+
+    // 3.  Clear UID from SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userId');
+
+    // 4.  Navigate to login or onboarding screen
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+  } catch (e) {
+    print('Logout failed: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Logout failed: ${e.toString()}')),
+    );
+  } finally {
+    // isSignOutLoading = false;
+    notifyListeners(); // Stop loader
   }
+}
+
 }

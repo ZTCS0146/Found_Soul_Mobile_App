@@ -24,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
-    final loginProvider = Provider.of<LoginProvider>(context, listen: false);
+  
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -38,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ],
       ),
       body: profileProvider.nameController.text.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: AppTheme.textPrimary))
           : SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Column(
@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(height: 30.h),
                   _combinedInfoCard(profileProvider),
-                  actionCard(context, loginProvider),
+                  actionCard(context, profileProvider),
                 ],
               ),
             ),
@@ -90,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget actionCard(BuildContext context, LoginProvider loginProvider) {
+  Widget actionCard(BuildContext context, ProfileProvider profileProvider) {
     return Container(
       width: double.infinity,
       margin: EdgeInsets.only(bottom: 20.h),
@@ -110,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           }),
           _divider(),
           _actionRow("Logout", () {
-            loginProvider.signOutUser(context);
+            profileProvider.signOutUser(context);
           }),
         ],
       ),
