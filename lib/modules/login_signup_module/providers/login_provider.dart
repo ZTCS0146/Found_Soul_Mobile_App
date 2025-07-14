@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:found_soul_mobile_app/util/shared_preference.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginProvider extends ChangeNotifier {
@@ -9,10 +11,12 @@ class LoginProvider extends ChangeNotifier {
  final forgotEmailController = TextEditingController();
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
  GlobalKey<FormState> forgotFormKey = GlobalKey<FormState>();
-
+final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseDatabase _realtimeDb = FirebaseDatabase.instance;
   // Validation status (optional if you want UI state management)
   bool isLoading = false;
   bool isSignOutLoading = false;
+  Map<String, dynamic>? userProfile;
   // Dispose method
   void disposeControllers() {
     emailController.dispose();
@@ -27,21 +31,50 @@ class LoginProvider extends ChangeNotifier {
     return forgotFormKey.currentState?.validate() ?? false;
   }
   // Submit Login
-  Future<void> login(BuildContext context) async {
+   Future<void> login(BuildContext context) async {
     if (!validateForm()) return;
 
     isLoading = true;
     notifyListeners();
 
     try {
-      // Simulate login delay or perform API call
-      await Future.delayed(const Duration(seconds: 2));
-
-        Navigator.pushReplacementNamed(context, '/bottomNavContainer');
-
-      // Navigate to home or dashboard, etc.
+      //  Firebase Login
+      final userCredential = await _auth.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+// Store user ID in shared preferences
+      final uid = userCredential.user!.uid;
+     try {
+      await storeUserId(uid);
     } catch (e) {
-      debugPrint('Login failed: $e');
+      print('Error storing user ID: $e');
+    }
+    //  Fetch user profile
+    final snapshot = await _realtimeDb.ref('users/$uid').get();
+
+    if (snapshot.exists) {
+      userProfile = Map<String, dynamic>.from(snapshot.value as Map);
+        print(" User data: $userProfile");
+        ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Login successful!")),
+      );
+        // Navigate to home screen
+        Navigator.pushReplacementNamed(context, '/bottomNavContainer');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("⚠️ User data not found.")),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("❌ Login failed: ${e.message}")),
+      );
+    } catch (e) {
+      debugPrint('Login error: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("⚠️ Unexpected error occurred.")),
+      );
     } finally {
       isLoading = false;
       notifyListeners();
@@ -112,6 +145,8 @@ Future<void> signInWithGoogle(BuildContext context) async {
     );
   }
 }
+ 
+
 Future<void> signOutUser(BuildContext context) async {
   isSignOutLoading = true;
   notifyListeners(); // Start loader

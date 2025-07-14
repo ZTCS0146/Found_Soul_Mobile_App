@@ -18,17 +18,21 @@ class ChangePasswordScreen extends StatelessWidget {
     final forgotProvider = Provider.of<ChangePasswordProvider>(context);
 
     return Scaffold(
-      appBar:forgotPassword==true? CustomAppBar(title: "New Password",showBackButton: true,):null,
+      appBar:forgotPassword==true? CustomAppBar(title: "New Password",showBackButton: true,):CustomAppBar(title: "Change Password",showBackButton: true,),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding:  EdgeInsets.symmetric(vertical: 32.sp),
-              child: Center(child: Text(forgotPassword==true?
-            'New Password':    'Change Password', style: AppTheme.heading1)),
-            ),
+            // forgotPassword==true?Container():Padding(
+            //   padding:  EdgeInsets.symmetric(vertical: 32.sp),
+            //   child: Center(child: Text('Change Password', style: AppTheme.heading1)),
+            // ):Container()
+            // Padding(
+            //   padding:  EdgeInsets.symmetric(vertical: 32.sp),
+            //   child: Center(child: Text(forgotPassword==true?
+            // 'New Password':    'Change Password', style: AppTheme.heading1)),
+            // ),
             forgotPassword==true?    SizedBox(height: 8.h):Container(),
 
 

@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/modules/bottom_navigation/screens/bottom_navigation.dart';
+import 'package:found_soul_mobile_app/modules/event_module/providers/event_provider.dart';
 import 'package:found_soul_mobile_app/modules/event_module/screens/event_details.dart';
 import 'package:found_soul_mobile_app/modules/event_module/screens/tab_bar_screen.dart';
+import 'package:found_soul_mobile_app/modules/iframe_module/screens/provider/iframe_provider.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/screens/verify_email.dart';
 import 'package:found_soul_mobile_app/modules/notification_module/provider/notification_provider.dart';
 import 'package:found_soul_mobile_app/modules/notification_module/screens/notification.dart';
@@ -45,6 +47,9 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ChangePasswordProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => WebViewProvider()),
+        ChangeNotifierProvider(create: (_) => EventProvider()),
+        
       ],
       child: const MyApp(),
     ),
@@ -105,7 +110,7 @@ class MyApp extends StatelessWidget {
           '/signup':(_)=>const SignupScreen(),
           '/changepassword':(_)=> ChangePasswordScreen(forgotPassword: false,),
           "/event":(context) => EventScreen(),
-          "/eventdetails":(context) =>  const EventDetailsScreen(),
+          "/eventdetails":(context) =>   EventDetailsScreen(),
         "/bottomNavContainer":(context) =>   const BottomNavContainer(),
        "/editProfile":(context) =>   const EditProfileScreen(),
        "/forgotPassword":(context) =>   const ForgotPasswordScreen(),

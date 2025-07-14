@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/custom_icon/custom_icons_icons.dart';
+import 'package:found_soul_mobile_app/modules/event_module/screens/event_details.dart';
 import 'package:found_soul_mobile_app/modules/event_module/screens/tab_bar_screen.dart';
 import 'package:found_soul_mobile_app/modules/iframe_module/screens/playlist.dart';
 import 'package:found_soul_mobile_app/modules/map_module/screens/map.dart';
@@ -19,7 +20,7 @@ class _BottomNavContainerState extends State<BottomNavContainer> {
   int currentIndex = 0;
 
   final List<Widget> pages =  [
-    EventScreen(),
+    EventDetailsScreen(),
     ShopWebViewPage(),
     MapScreen(),
     PlaylistWebViewPage(),

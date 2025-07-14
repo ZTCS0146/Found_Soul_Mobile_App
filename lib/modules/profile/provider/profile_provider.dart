@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -9,8 +11,7 @@ class ProfileProvider extends ChangeNotifier {
 
 
   // Loading State
-  bool isLoading = false;
-
+ bool isProfileLoading = false;
   // Image State
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -34,9 +35,49 @@ class ProfileProvider extends ChangeNotifier {
     }
   }
 
+// get User Profile
+
+
+ 
+
+  Future<void> fetchAndLoadUserProfile() async {
+    try {
+      isProfileLoading = true;
+      notifyListeners();
+
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final snap = await FirebaseDatabase.instance.ref('users/$uid').get();
+
+      if (!snap.exists) throw Exception('Profile missing in RTDB');
+
+      final data = Map<String, dynamic>.from(snap.value as Map);
+
+      // ✅ Populate your controllers and dropdown
+      nameController.text = data['name'] ?? '';
+      emailController.text = data['email'] ?? '';
+      selectedGender = data['gender'] ?? 'Female';
+
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error loading profile: $e');
+      rethrow;
+    } finally {
+      isProfileLoading = false;
+      notifyListeners();
+    }
+  }
+
+  void disposeControllers() {
+    nameController.dispose();
+    emailController.dispose();
+  }
+
+
+
+
   /// Set loading state
   void setLoading(bool value) {
-    isLoading = value;
+    isProfileLoading = value;
     notifyListeners();
   }
 

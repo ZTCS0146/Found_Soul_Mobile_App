@@ -144,8 +144,8 @@ CustomDropdownField(
             ),
 
             /// Fixed Bottom Button and Footer
-            appButton("Sign Up", () {
-              provider.submit();
+            appButton("Sign Up",isLoading: provider.isLoading, () {
+              provider.submit(context);
             }),
             SizedBox(height: 16.h),
 

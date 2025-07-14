@@ -93,7 +93,7 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(height: 24.h),
             
                 // Login Button
-               appButton("Login",              () {
+               appButton("Login",  isLoading: loginProvider.isLoading,     () {
          loginProvider.login(context);
 }),
                 SizedBox(height: 20.h),
