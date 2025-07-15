@@ -21,20 +21,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
 
+
   @override
   Widget build(BuildContext context) {
          final profileProvider = Provider.of<ProfileProvider>(context);
 
     return Scaffold(
       // backgroundColor: Colors.black,
-      appBar: const CustomAppBar(title: 'Edit Profile',showBackButton :false,
+      appBar: const CustomAppBar(title: 'Edit Profile',showBackButton :true,
      
       ),
     
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: SingleChildScrollView(
-          child: Column(
+          child:Form(
+  key: profileProvider.formForgotKey, // <- this is required!
+  child: Column(
             children: [
               SizedBox(height: 20.h),
           
@@ -85,14 +88,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   SizedBox(height: 30.h),          
               /// Email field
             
-          
-              /// Gender dropdown
+         
              /// Gender dropdown
 DropdownButtonFormField<String>(
-  value: profileProvider.genders.contains(profileProvider.selectedGender)
-      ? profileProvider.selectedGender
-      : null, // Fallback if value is invalid
+  value: profileProvider.selectedGender ?? "",
+  // Fallback if value is invalid
+
   decoration: InputDecoration(
+  
     hintText: "Gender",
     enabledBorder: OutlineInputBorder(
       borderSide: const BorderSide(color: AppTheme.textSecondary),
@@ -126,7 +129,7 @@ DropdownButtonFormField<String>(
 
               SizedBox(height: 30.h),
           appButton("Save Details", () {
-            profileProvider.updateUserProfile();
+            profileProvider.updateUserProfile(context);
 
           },
           isLoading: profileProvider.isProfileUpdateLoading),
@@ -136,7 +139,7 @@ DropdownButtonFormField<String>(
           ),
         ),
       ),
-    );
+    ));
   }
 
   

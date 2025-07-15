@@ -4,6 +4,7 @@ import 'package:found_soul_mobile_app/helper_widget/app_button.dart';
 import 'package:found_soul_mobile_app/helper_widget/appbar.dart';
 import 'package:found_soul_mobile_app/helper_widget/textformfield_widget.dart';
 import 'package:found_soul_mobile_app/modules/profile/provider/changepwd_provider.dart';
+import 'package:found_soul_mobile_app/modules/profile/provider/profile_provider.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -16,12 +17,14 @@ class ChangePasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final forgotProvider = Provider.of<ChangePasswordProvider>(context);
-
+    final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     return Scaffold(
       appBar:forgotPassword==true? CustomAppBar(title: "New Password",showBackButton: true,):CustomAppBar(title: "Change Password",showBackButton: true,),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 32.h),
-        child: Column(
+        child:Form(
+  key: forgotProvider.formChangePasswordKey, // <- this is required!
+  child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
            
@@ -62,7 +65,9 @@ class ChangePasswordScreen extends StatelessWidget {
             ),
             SizedBox(height: 24.h),
             appButton(
-              "Change Password",(){}
+              "Change Password",(){
+                forgotProvider.submitChangePassword(context, profileProvider);
+              }
               // provider.isLoading
               //     ? null
               //     : () => provider.submitChangePassword(context),
@@ -70,6 +75,6 @@ class ChangePasswordScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }

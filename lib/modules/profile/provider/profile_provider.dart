@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
@@ -59,7 +60,13 @@ class ProfileProvider extends ChangeNotifier {
       // Populate your controllers and dropdown
       nameController.text = data['name'] ?? '';
       emailController.text = data['email'] ?? '';
-      selectedGender = data['gender'] ?? 'Female';
+    selectedGender = (data['gender'] ?? 'Female').toString();
+
+if (!genders.contains(selectedGender)) {
+  selectedGender = genders.first;
+}
+
+
 
       notifyListeners();
     } catch (e) {
@@ -70,8 +77,7 @@ class ProfileProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-Future<void> updateUserProfile() async {
+Future<void> updateUserProfile(BuildContext context) async {
   try {
     isProfileUpdateLoading = true;
     notifyListeners();
@@ -79,18 +85,37 @@ Future<void> updateUserProfile() async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) throw Exception('User not logged in');
 
+    String? imageUrl;
+
+    // ✅ Upload image if a new one is selected
+    if (imageFile != null) {
+      final storageRef = FirebaseStorage.instance.ref().child('profile_images/$uid.jpg');
+      final uploadTask = await storageRef.putFile(imageFile!);
+      imageUrl = await uploadTask.ref.getDownloadURL();
+    }
+
+    //  Construct updated data
     final updatedData = {
       'name': nameController.text.trim(),
       'email': emailController.text.trim(),
       'gender': selectedGender,
       'updatedAt': DateTime.now().toIso8601String(),
+      if (imageUrl != null) 'imageUrl': imageUrl, // only add if image uploaded
     };
 
+    //  Update Firebase Realtime Database
     await FirebaseDatabase.instance.ref('users/$uid').update(updatedData);
 
+    //  Show success message
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Profile updated successfully.')),
+    );
     debugPrint('User profile updated successfully.');
   } catch (e) {
-    debugPrint(' Failed to update user profile: $e');
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to update user profile: $e')),
+    );
+    debugPrint('Failed to update user profile: $e');
     rethrow;
   } finally {
     isProfileUpdateLoading = false;
