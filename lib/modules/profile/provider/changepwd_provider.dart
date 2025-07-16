@@ -2,91 +2,71 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:found_soul_mobile_app/modules/profile/provider/profile_provider.dart';
 import 'package:found_soul_mobile_app/modules/profile/screens/profile.dart';
+import 'package:found_soul_mobile_app/util/shared_preference.dart';
+import 'package:provider/provider.dart';
 
 class ChangePasswordProvider extends ChangeNotifier {
-  
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+
+  final oldPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
 final GlobalKey<FormState> formChangePasswordKey = GlobalKey<FormState>();
 
-  bool isLoading = false;
+bool isChangingPassword = false;
 
-  // void submitChangePassword(BuildContext context) {
-  //   if (!formForgotKey.currentState!.validate()) return;
-
-  //   isLoading = true;
-  //   notifyListeners();
-
-  //   // Simulate API call
-  //   Future.delayed(const Duration(seconds: 2), () {
-  //     isLoading = false;
-  //     notifyListeners();
-
-  //     // You can navigate or show success
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Password changed successfully')),
-  //     );
-  //   });
-  // }
 
   @override
   void dispose() {
-    passwordController.dispose();
-    confirmPasswordController.dispose();
+    oldPasswordController.dispose();
+    newPasswordController.dispose();
     super.dispose();
   }
 
 
  
 
-  /// ✅ Change password logic
-  Future<void> changePassword(String newPassword) async {
+ Future<void> reAuthenticateAndChangePassword({
+  required BuildContext context,
+
+}) async {
+  
+  try {
+    isChangingPassword = true;
+   notifyListeners();
+
     final user = FirebaseAuth.instance.currentUser;
+    final email = user?.email ?? await getEmail();
 
-    if (user == null) {
-      throw Exception('No user is signed in.');
+    if (user == null || email == null || email.isEmpty) {
+      throw Exception('User not logged in or email missing');
     }
 
-    await user.updatePassword(newPassword);
-  }
+    final credential = EmailAuthProvider.credential(
+      email: email,
+      password: oldPasswordController.text,
+    );
 
-  /// ✅ Submit password change (with form validation + loader)
-  Future<void> submitChangePassword(BuildContext context,ProfileProvider profileProvider) async {
-    if (!formChangePasswordKey.currentState!.validate()) return;
+    await user.reauthenticateWithCredential(credential);
+    await user.updatePassword(newPasswordController.text);
 
-    isLoading = true;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Password successfully changed')),
+    );
+    Navigator.pop(context);
+  } on FirebaseAuthException catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Firebase error: ${e.message}')),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
+  } finally {
+    isChangingPassword = false;
     notifyListeners();
-
-    final newPassword = passwordController.text.trim();
-
-    try {
-      await changePassword(newPassword);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password changed successfully')),
-      );
-      debugPrint('Password updated.');
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'requires-recent-login') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please re-authenticate and try again.')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Firebase error: ${e.message}')),
-        );
-      }
-      debugPrint('Firebase error: ${e.code} - ${e.message}');
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-      debugPrint('Error: $e');
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
   }
+}
+
+
 
   /// ✅ (Optional) Re-authenticate the user
   Future<void> reAuthenticate(String email, String oldPassword) async {

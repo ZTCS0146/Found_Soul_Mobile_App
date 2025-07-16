@@ -39,35 +39,38 @@ class ChangePasswordScreen extends StatelessWidget {
              forgotPassword==true?    SizedBox(height: 8.h):Container(),
                      
             CustomTextField(
-              hintText: "Password",
-              controller: forgotProvider.passwordController,
-              isPassword: true,
-              obscureText: true,
-              validator: (value) {
-                if (value == null || value.length < 6) {
-                  return "Password must be at least 6 characters";
-                }
-                return null;
-              },
-            ),
-            SizedBox(height: 16.h),
-            CustomTextField(
-              hintText: "Confirm Password",
-              controller: forgotProvider.confirmPasswordController,
-              isPassword: true,
-              obscureText: true,
-              validator: (value) {
-                if (value != forgotProvider.passwordController.text) {
-                  return "Passwords do not match";
-                }
-                return null;
-              },
-            ),
+  hintText: "Old Password",
+  controller: forgotProvider.oldPasswordController,
+  isPassword: true,
+  obscureText: true,
+  validator: (value) {
+    if (value == null || value.length < 6) {
+      return "Old password must be at least 6 characters";
+    }
+    return null;
+  },
+),
+SizedBox(height: 16.h),
+CustomTextField(
+  hintText: "New Password",
+  controller: forgotProvider.newPasswordController,
+  isPassword: true,
+  obscureText: true,
+  validator: (value) {
+    if (value == null || value.length < 6) {
+      return "New password must be at least 6 characters";
+    }
+    return null;
+  },
+),
+
             SizedBox(height: 24.h),
             appButton(
-              "Change Password",(){
-                forgotProvider.submitChangePassword(context, profileProvider);
-              }
+              "Change Password",
+           
+              (){
+                forgotProvider.reAuthenticateAndChangePassword(context: context);
+              },isLoading:    forgotProvider.isChangingPassword,
               // provider.isLoading
               //     ? null
               //     : () => provider.submitChangePassword(context),

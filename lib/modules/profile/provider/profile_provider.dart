@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:found_soul_mobile_app/util/shared_preference.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,7 +62,7 @@ class ProfileProvider extends ChangeNotifier {
       nameController.text = data['name'] ?? '';
       emailController.text = data['email'] ?? '';
     selectedGender = (data['gender'] ?? 'Female').toString();
-
+await saveEmail(emailController.text);
 if (!genders.contains(selectedGender)) {
   selectedGender = genders.first;
 }
@@ -148,6 +149,7 @@ Future<void> updateUserProfile(BuildContext context) async {
     // 3.  Clear UID from SharedPreferences
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('userId');
+       await removeEmail();
 
     // 4.  Navigate to login or onboarding screen
     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);

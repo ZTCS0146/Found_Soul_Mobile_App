@@ -14,3 +14,15 @@ Future<void> removeUserId() async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.remove('userId');
 }
+Future<void> saveEmail(String email) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('user_email', email);
+}
+Future<String?> getEmail() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('user_email');
+}
+Future<void> removeEmail() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('user_email');
+}
