@@ -54,6 +54,15 @@
         <string>com.googleusercontent.apps.1234567890-abcdefg123456</string>
       </array>
     </dict>
+    <!-- Apple Sign-In (Optional, only if using web authentication fallback) -->
+    <dict>
+      <key>CFBundleTypeRole</key>
+      <string>None</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>com.example.foundSoulMobileApp</string> <!-- Replace with your actual Bundle ID -->
+      </array>
+    </dict>
   </array>
 
   <!-- Optional: Needed for displaying camera/microphone/location dialogs -->

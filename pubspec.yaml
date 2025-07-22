@@ -49,6 +49,7 @@ dependencies:
   firebase_database: ^11.3.9
   shared_preferences: ^2.5.3
   firebase_storage: ^12.4.9
+  sign_in_with_apple: ^7.0.1
 
 
 dev_dependencies:

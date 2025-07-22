@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:found_soul_mobile_app/util/shared_preference.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class LoginProvider extends ChangeNotifier {
   // Controllers
@@ -81,29 +82,49 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
     }
   }
 
-   Future<void> forgotPassword(BuildContext context) async {
-    if (!validateForgotForm()) return;
+  //  Future<void> forgotPassword(BuildContext context) async {
+  //   if (!validateForgotForm()) return;
 
-    isLoading = true;
-    notifyListeners();
+  //   isLoading = true;
+  //   notifyListeners();
 
-    try {
-      // Simulate login delay or perform API call
-      await Future.delayed(const Duration(seconds: 2));
+  //   try {
+  //     // Simulate login delay or perform API call
+  //     await Future.delayed(const Duration(seconds: 2));
 
-        Navigator.pushReplacementNamed(context, '/otpVerification');
+  //       Navigator.pushReplacementNamed(context, '/otpVerification');
 
-      // Navigate to home or dashboard, etc.
-    } catch (e) {
-      debugPrint('Login failed: $e');
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
+  //     // Navigate to home or dashboard, etc.
+  //   } catch (e) {
+  //     debugPrint('Login failed: $e');
+  //   } finally {
+  //     isLoading = false;
+  //     notifyListeners();
+  //   }
+  // }
+
+
+
+  Future<void> sendForgotPasswordEmail(BuildContext context, String email) async {
+  try {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Password reset email sent. Check your inbox.')),
+    );
+
+    debugPrint('Password reset link sent to $email');
+  } on FirebaseAuthException catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: ${e.message}')),
+    );
+    debugPrint('FirebaseAuthException: ${e.code} - ${e.message}');
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error: $e')),
+    );
   }
-
-
-
+}
 
 Future<void> signInWithGoogle(BuildContext context) async {
   try {
@@ -146,6 +167,32 @@ Future<void> signInWithGoogle(BuildContext context) async {
   }
 }
  
+
+
+Future<void> signInWithApple() async {
+  try {
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+
+    // Create Firebase credential
+    final oauthCredential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      accessToken: appleCredential.authorizationCode,
+    );
+
+    // Sign in to Firebase
+    final userCredential =
+        await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+    print("User signed in: ${userCredential.user?.uid}");
+  } catch (e) {
+    print("Apple Sign-In failed: $e");
+  }
+}
 
 
 
