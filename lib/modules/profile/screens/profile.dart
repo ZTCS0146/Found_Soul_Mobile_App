@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/helper_widget/appbar.dart';
-import 'package:found_soul_mobile_app/modules/login_signup_module/providers/login_provider.dart';
 import 'package:found_soul_mobile_app/modules/profile/provider/profile_provider.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
+
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -37,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
       ),
-      body: profileProvider.nameController.text.isEmpty
+      body: profileProvider.isProfileLoading
           ? const Center(child: CircularProgressIndicator(color: AppTheme.textPrimary))
           : SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 16.w),

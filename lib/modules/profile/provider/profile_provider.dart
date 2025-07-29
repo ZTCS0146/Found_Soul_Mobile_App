@@ -1,10 +1,18 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:found_soul_mobile_app/util/shared_preference.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,40 +52,59 @@ class ProfileProvider extends ChangeNotifier {
 // get User Profile
 
 
- 
 
-  Future<void> fetchAndLoadUserProfile() async {
-    try {
-      isProfileLoading = true;
-      notifyListeners();
+Future<void> fetchAndLoadUserProfile() async {
+  try {
+    isProfileLoading = true;
+    notifyListeners();
 
-      final uid = FirebaseAuth.instance.currentUser!.uid;
-      final snap = await FirebaseDatabase.instance.ref('users/$uid').get();
+    final firebaseUser = FirebaseAuth.instance.currentUser;
+    final uid = firebaseUser?.uid;
 
-      if (!snap.exists) throw Exception('Profile missing in RTDB');
+    if (uid == null) throw Exception('User not logged in');
 
-      final data = Map<String, dynamic>.from(snap.value as Map);
+    final snap = await FirebaseDatabase.instance.ref('users/$uid').get();
 
-      // Populate your controllers and dropdown
-      nameController.text = data['name'] ?? '';
-      emailController.text = data['email'] ?? '';
+    Map<String, dynamic> data = {};
+
+    if (snap.exists) {
+      data = Map<String, dynamic>.from(snap.value as Map);
+    } else if (firebaseUser?.providerData.first.providerId == 'apple.com') {
+      // 🧠 Fallback: build minimal profile for Apple user
+      final nameParts = firebaseUser?.displayName?.split(' ') ?? ['Apple', 'User'];
+      data = {
+        'name': firebaseUser?.displayName ?? '${nameParts.first} ${nameParts.length > 1 ? nameParts[1] : ''}',
+        'email': firebaseUser?.email ?? '',
+        'gender': 'Female',
+      };
+
+      // Optional: Save fallback profile to Firebase
+      await FirebaseDatabase.instance.ref('users/$uid').set(data);
+    } else {
+      throw Exception('Profile missing in RTDB');
+    }
+
+    // Populate your form controllers and state
+    nameController.text = data['name'] ?? '';
+    emailController.text = data['email'] ?? '';
     selectedGender = (data['gender'] ?? 'Female').toString();
-await saveEmail(emailController.text);
-if (!genders.contains(selectedGender)) {
-  selectedGender = genders.first;
+
+    await saveEmail(emailController.text);
+
+    if (!genders.contains(selectedGender)) {
+      selectedGender = genders.first;
+    }
+
+    notifyListeners();
+  } catch (e) {
+    debugPrint('Error loading profile: $e');
+    rethrow;
+  } finally {
+    isProfileLoading = false;
+    notifyListeners();
+  }
 }
 
-
-
-      notifyListeners();
-    } catch (e) {
-      debugPrint('Error loading profile: $e');
-      rethrow;
-    } finally {
-      isProfileLoading = false;
-      notifyListeners();
-    }
-  }
 Future<void> updateUserProfile(BuildContext context) async {
   try {
     isProfileUpdateLoading = true;
@@ -89,11 +116,11 @@ Future<void> updateUserProfile(BuildContext context) async {
     String? imageUrl;
 
     // ✅ Upload image if a new one is selected
-    if (imageFile != null) {
-      final storageRef = FirebaseStorage.instance.ref().child('profile_images/$uid.jpg');
-      final uploadTask = await storageRef.putFile(imageFile!);
-      imageUrl = await uploadTask.ref.getDownloadURL();
-    }
+    // if (imageFile != null) {
+    //   final storageRef = FirebaseStorage.instance.ref().child('profile_images/$uid.jpg');
+    //   final uploadTask = await storageRef.putFile(imageFile!);
+    //   imageUrl = await uploadTask.ref.getDownloadURL();
+    // }
 
     //  Construct updated data
     final updatedData = {
@@ -101,7 +128,7 @@ Future<void> updateUserProfile(BuildContext context) async {
       'email': emailController.text.trim(),
       'gender': selectedGender,
       'updatedAt': DateTime.now().toIso8601String(),
-      if (imageUrl != null) 'imageUrl': imageUrl, // only add if image uploaded
+      // if (imageUrl != null) 'imageUrl': imageUrl, // only add if image uploaded
     };
 
     //  Update Firebase Realtime Database
@@ -136,12 +163,12 @@ Future<void> updateUserProfile(BuildContext context) async {
   notifyListeners(); // Start loader (optional for UI state)
 
   try {
-    final googleSignIn = GoogleSignIn();
+    // final googleSignIn = GoogleSignIn();
 
-    // 1.  Sign out from Google if signed in
-    if (await googleSignIn.isSignedIn()) {
-      await googleSignIn.signOut();
-    }
+    // // 1.  Sign out from Google if signed in
+    // if (await googleSignIn.isSignedIn()) {
+    //   await googleSignIn.signOut();
+    // }
 
     // 2.  Sign out from Firebase
     await FirebaseAuth.instance.signOut();
@@ -165,3 +192,4 @@ Future<void> updateUserProfile(BuildContext context) async {
 }
 
 }
+

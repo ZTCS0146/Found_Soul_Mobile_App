@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/custom_icon/custom_icons_icons.dart';
 import 'package:found_soul_mobile_app/modules/event_module/screens/event_details.dart';
-import 'package:found_soul_mobile_app/modules/event_module/screens/tab_bar_screen.dart';
 import 'package:found_soul_mobile_app/modules/iframe_module/screens/playlist.dart';
+import 'package:found_soul_mobile_app/modules/iframe_module/screens/shop.dart';
 import 'package:found_soul_mobile_app/modules/map_module/screens/map.dart';
 import 'package:found_soul_mobile_app/modules/profile/screens/profile.dart';
-import 'package:found_soul_mobile_app/modules/iframe_module/screens/shop.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
+
 
 class BottomNavContainer extends StatefulWidget {
   const BottomNavContainer({super.key});
@@ -26,7 +27,13 @@ class _BottomNavContainerState extends State<BottomNavContainer> {
     PlaylistWebViewPage(),
     ProfileScreen()
   ];
-
+  final List<String> titles = [
+    'Events',
+    'Shop',
+    'Map',
+    'Playlist',
+    'Profile',
+  ];
   void onItemTapped(int index) {
     setState(() {
       currentIndex = index;
@@ -55,6 +62,14 @@ class CustomBottomNavBar extends StatelessWidget {
     this.onTap,
   });
 
+  get titles => [
+        'Get Passes',
+        'Shop',
+        'Rave Location',
+        'Playlists',
+        'Profile',
+      ];
+
   @override
   Widget build(BuildContext context) {
     const items = [
@@ -67,7 +82,7 @@ class CustomBottomNavBar extends StatelessWidget {
     ];
 
     return Container(
-      height: 60.h,
+      height: 70.h,
       color: Colors.black,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -93,6 +108,17 @@ class CustomBottomNavBar extends StatelessWidget {
                   items[index],
                   color: isSelected ? AppTheme.secondaryColor : AppTheme.buttonSecondaryColor ,
                 ),
+                
+                const SizedBox(height: 4),
+  
+                
+  Text(
+            titles[index],
+            style: AppTheme.tabBarTitle.copyWith(
+                fontWeight: FontWeight.w600, fontSize: 12.sp),
+          ),
+
+                // Text(data)
               ],
             ),
           );

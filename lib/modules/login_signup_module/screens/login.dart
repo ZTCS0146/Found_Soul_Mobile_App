@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/helper_widget/app_button.dart';
 import 'package:found_soul_mobile_app/helper_widget/social_buttons.dart';
+import 'package:found_soul_mobile_app/helper_widget/state_drop_down.dart';
 import 'package:found_soul_mobile_app/helper_widget/textformfield_widget.dart';
-import 'package:found_soul_mobile_app/modules/profile/provider/changepwd_provider.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/providers/login_provider.dart';
-import 'package:found_soul_mobile_app/modules/profile/screens/change_password.dart';
+import 'package:found_soul_mobile_app/modules/login_signup_module/providers/signup_provider.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
+
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -15,6 +18,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LoginProvider>(context);
+    final provider = Provider.of<SignUpProvider>(context);
 
     return Scaffold(
       
@@ -41,7 +45,7 @@ class LoginScreen extends StatelessWidget {
                    style: AppTheme.heading2,
                 ),
                 SizedBox(height: 40.h),
-            
+      
                 // Email
                CustomTextField(
                                 hintText: "Email",
@@ -76,10 +80,24 @@ class LoginScreen extends StatelessWidget {
                               ),
 
                 SizedBox(height: 12.h),
+                      CustomDropdownField(
+          hintText: 'Select State',
+          value: provider.selectedState,
+          items: provider.usStates,
+          onChanged: (val) {
+            provider.setSelectedState(val);
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please select a state';
+            }
+            return null;
+          },
+        ),     SizedBox(height: 16.h),
             
                 InkWell(
                   onTap: (){
-                    loginProvider.sendForgotPasswordEmail(context, loginProvider.forgotEmailController.text.trim());
+                                            Navigator.pushNamed(context, '/forgotPassword');
 
                   },
                   child: Align(
@@ -94,7 +112,7 @@ class LoginScreen extends StatelessWidget {
             
                 // Login Button
                appButton("Login",  isLoading: loginProvider.isLoading,     () {
-         loginProvider.login(context);
+         loginProvider.login(context,provider.selectedState);
 }),
                 SizedBox(height: 20.h),
             
@@ -116,16 +134,16 @@ class LoginScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     socialButton("Apple",Icons.apple,() {
-         loginProvider.login(context);
+         loginProvider.signInWithApple(context);
 }),
                     SizedBox(width: 16.w),
                     socialButton("Google",Icons.g_mobiledata,() {
-         loginProvider.signInWithGoogle(context);
+        // loginProvider.signInWithGoogle(context);
 }),
                    
                   ],
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height*0.12),
+                SizedBox(height: MediaQuery.of(context).size.height*0.1),
            
                 // Bottom Text
                 InkWell(

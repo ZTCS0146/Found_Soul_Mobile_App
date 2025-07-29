@@ -1,39 +1,53 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+
+
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:found_soul_mobile_app/firebase_options.dart';
 import 'package:found_soul_mobile_app/modules/bottom_navigation/screens/bottom_navigation.dart';
 import 'package:found_soul_mobile_app/modules/event_module/providers/event_provider.dart';
 import 'package:found_soul_mobile_app/modules/event_module/screens/event_details.dart';
 import 'package:found_soul_mobile_app/modules/event_module/screens/tab_bar_screen.dart';
 import 'package:found_soul_mobile_app/modules/iframe_module/screens/provider/iframe_provider.dart';
+import 'package:found_soul_mobile_app/modules/login_signup_module/providers/login_provider.dart';
+import 'package:found_soul_mobile_app/modules/login_signup_module/providers/signup_provider.dart';
+import 'package:found_soul_mobile_app/modules/login_signup_module/screens/forgot_password.dart';
+import 'package:found_soul_mobile_app/modules/login_signup_module/screens/login.dart';
+import 'package:found_soul_mobile_app/modules/login_signup_module/screens/signup.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/screens/verify_email.dart';
 import 'package:found_soul_mobile_app/modules/notification_module/provider/notification_provider.dart';
 import 'package:found_soul_mobile_app/modules/notification_module/screens/notification.dart';
 import 'package:found_soul_mobile_app/modules/profile/provider/changepwd_provider.dart';
-import 'package:found_soul_mobile_app/modules/login_signup_module/providers/login_provider.dart';
-import 'package:found_soul_mobile_app/modules/login_signup_module/providers/signup_provider.dart';
-import 'package:found_soul_mobile_app/modules/login_signup_module/screens/forgot_password.dart';
 import 'package:found_soul_mobile_app/modules/profile/provider/profile_provider.dart';
 import 'package:found_soul_mobile_app/modules/profile/screens/change_password.dart';
-import 'package:found_soul_mobile_app/modules/login_signup_module/screens/login.dart';
-import 'package:found_soul_mobile_app/modules/login_signup_module/screens/signup.dart';
 import 'package:found_soul_mobile_app/modules/profile/screens/edit_profile.dart';
-import 'package:found_soul_mobile_app/modules/splash_module/screens/onboarding.dart';
 import 'package:found_soul_mobile_app/modules/splash_module/providers/splash_provider.dart';
+import 'package:found_soul_mobile_app/modules/splash_module/screens/onboarding.dart';
 import 'package:found_soul_mobile_app/modules/splash_module/screens/splash.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
 import 'package:found_soul_mobile_app/util/navigation_service.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+
+// import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 
 
-Future<void> main() async {
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-      initOneSignal();
+    
 
-    await Firebase.initializeApp(); // This might fail if config files are missing
+  await Firebase.initializeApp(
+    // options: DefaultFirebaseOptions.currentPlatform, // ✅ use this!
+  );
+   initOneSignal();
+
+
+    //  await Firebase.initializeApp(); // This might fail if config files are missing
   } catch (e) {
     print('Firebase init error: $e');
   }

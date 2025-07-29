@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/helper_widget/app_button.dart';
 import 'package:found_soul_mobile_app/helper_widget/appbar.dart';
 import 'package:found_soul_mobile_app/helper_widget/textformfield_widget.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/providers/login_provider.dart';
+import 'package:found_soul_mobile_app/modules/profile/provider/changepwd_provider.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
+
 import 'package:provider/provider.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
@@ -13,7 +17,7 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
         final loginProvider = Provider.of<LoginProvider>(context);
-
+    final changeProvider = Provider.of<ChangePasswordProvider>(context);
     return Scaffold(
       appBar: const CustomAppBar(title: "Forgot Password",showBackButton: true,),
       body: Padding(
@@ -53,9 +57,10 @@ class ForgotPasswordScreen extends StatelessWidget {
                               ), const SizedBox(height: 16.0),
            
           appButton("Change Password", () {
-   Navigator.pushNamed(context, '/emailVerification', arguments: {
-     'forgotPassword': true
-   });
+            changeProvider.sendPasswordResetEmail(context,loginProvider.forgotEmailController.text.trim());
+  //  Navigator.pushNamed(context, '/emailVerification', arguments: {
+  //    'forgotPassword': true
+  //  });
            }),
           ],
         ),

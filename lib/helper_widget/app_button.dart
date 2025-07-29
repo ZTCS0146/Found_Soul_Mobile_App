@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
+
 Widget appButton(String buttonText, VoidCallback? onPressed, {bool isLoading = false}) {
   return SizedBox(
     width: double.infinity,

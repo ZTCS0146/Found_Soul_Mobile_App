@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/helper_widget/appbar.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
+
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
@@ -43,7 +45,7 @@ class NotificationScreen extends StatelessWidget {
                   return Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1C1C1E),
+                      color:  Colors.white,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -67,17 +69,17 @@ class NotificationScreen extends StatelessWidget {
                             children: [
                               Text(
                                 item['title'] ?? 'No Title',
-                                style: AppTheme.caption,
+                                style: AppTheme.caption.copyWith(color: AppTheme.backgroundColor),
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 item['message'] ?? 'No Message',
-                                style: AppTheme.heading2.copyWith(color: AppTheme.cardColor),
+                                style: AppTheme.heading2.copyWith(color: AppTheme.backgroundColor),
                               ),
                               const SizedBox(height: 8),
                               Text(
                                 item['time'] ?? '',
-                                style: AppTheme.heading2,
+                                style: AppTheme.heading2.copyWith(color: AppTheme.backgroundColor),
                               ),
                             ],
                           ),

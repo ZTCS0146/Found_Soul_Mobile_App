@@ -7,14 +7,14 @@ plugins {
 }
 
 android {
-    namespace = "com.example.found_soul_mobile_app"
-    compileSdk = 34
+    namespace = "com.example.found_soul_mobile_app" // ✅ Correct namespace for your app
+    compileSdk = 35
     ndkVersion = "27.0.12077973"
 
     defaultConfig {
         applicationId = "com.example.found_soul_mobile_app"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 

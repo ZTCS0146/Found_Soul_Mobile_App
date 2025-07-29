@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:found_soul_mobile_app/helper_widget/event_list.dart';
-import 'package:found_soul_mobile_app/modules/event_module/screens/event_details.dart';
+
+
 
 class EventCardList extends StatelessWidget {
   bool isPast;

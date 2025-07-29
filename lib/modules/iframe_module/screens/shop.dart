@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:found_soul_mobile_app/helper_widget/appbar.dart';
 import 'package:found_soul_mobile_app/modules/iframe_module/screens/provider/iframe_provider.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
+
+
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:found_soul_mobile_app/helper_widget/appbar.dart';
 
 class ShopWebViewPage extends StatefulWidget {
   @override
@@ -34,14 +36,32 @@ class _ShopWebViewPageState extends State<ShopWebViewPage> {
     final isLoading = context.watch<WebViewProvider>().isLoading;
 
     return Scaffold(
-      appBar: const CustomAppBar(title: "Shop", showBackButton: false),
+      appBar:  CustomAppBar(title: "Shop", showBackButton: false,actions: [
+          IconButton(
+            icon: Icon(Icons.notifications_none, color: AppTheme.textPrimary),
+            onPressed: () => Navigator.pushNamed(context, '/notification'),
+          ),
+        ],),
       body: Stack(
         children: [
-          WebViewWidget(controller: _controller),
+          // 1. Background color to prevent white flash
+          Container(color: Colors.black),
+
+          // 2. WebView with fade-in transition
+          AnimatedOpacity(
+            opacity: isLoading ? 0 : 1,
+            duration: const Duration(milliseconds: 300),
+            child: WebViewWidget(controller: _controller),
+          ),
+
+          // 3. Fullscreen loader
           if (isLoading)
-            const Center(
-              child: CircularProgressIndicator(
-                color: AppTheme.textPrimary
+            Container(
+              color: Colors.black,
+              child: const Center(
+                child: CircularProgressIndicator(
+                  color: AppTheme.textPrimary,
+                ),
               ),
             ),
         ],

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:found_soul_mobile_app/helper_widget/app_button.dart';
-import 'package:found_soul_mobile_app/helper_widget/social_buttons.dart';
 import 'package:found_soul_mobile_app/helper_widget/state_drop_down.dart';
 import 'package:found_soul_mobile_app/helper_widget/textformfield_widget.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/providers/signup_provider.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
+
 import 'package:provider/provider.dart';
 
 class SignupScreen extends StatelessWidget {

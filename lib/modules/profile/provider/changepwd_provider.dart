@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:found_soul_mobile_app/modules/profile/provider/profile_provider.dart';
-import 'package:found_soul_mobile_app/modules/profile/screens/profile.dart';
 import 'package:found_soul_mobile_app/util/shared_preference.dart';
-import 'package:provider/provider.dart';
+
 
 class ChangePasswordProvider extends ChangeNotifier {
 
@@ -69,14 +67,26 @@ bool isChangingPassword = false;
 
 
   /// ✅ (Optional) Re-authenticate the user
-  Future<void> reAuthenticate(String email, String oldPassword) async {
-    final user = FirebaseAuth.instance.currentUser!;
-    final credential = EmailAuthProvider.credential(
-      email: email,
-      password: oldPassword,
+Future<void> sendPasswordResetEmail(BuildContext context, String email) async {
+  try {
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("✅ Password reset email sent to $email"),
+      
+      ),
     );
-    await user.reauthenticateWithCredential(credential);
+  } on FirebaseAuthException catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("❌ ${e.message}"),
+      
+      ),
+    );
   }
 }
+}
+
 
 

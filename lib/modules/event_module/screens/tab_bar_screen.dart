@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:found_soul_mobile_app/modules/bottom_navigation/screens/bottom_navigation.dart';
 import 'package:found_soul_mobile_app/modules/event_module/screens/event_details.dart';
-import 'package:found_soul_mobile_app/modules/event_module/screens/event_list.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
+
 
 class EventScreen extends StatelessWidget {
    EventScreen({super.key});
