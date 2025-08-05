@@ -47,8 +47,8 @@ dependencies:
   firebase_database: ^11.3.9
   firebase_storage: ^12.4.9
   sign_in_with_apple: ^7.0.1
-
-
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
   # ✅ Google Sign-In compatible with older Firebase SDK
   # google_sign_in: 5.4.4
 
@@ -70,6 +70,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.14.4
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.8
 
 flutter_launcher_icons:
   android: true

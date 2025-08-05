@@ -22,7 +22,7 @@ class SignUpProvider extends ChangeNotifier {
 
   bool isLoading = false;
 
-  final List<String> usStates = [
+   List<String> usStates = [
     'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
     'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
     'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas',
@@ -55,6 +55,12 @@ class SignUpProvider extends ChangeNotifier {
     passwordController.dispose();
     confirmPasswordController.dispose();
   }
+  
+  void clearSelectedState() {
+  _selectedState = null;
+  notifyListeners();
+}
+
 
   /// 📝 CREATE ACCOUNT with Loader and Reset
   Future<void> createAccount(BuildContext context) async {

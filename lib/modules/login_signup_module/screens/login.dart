@@ -112,7 +112,7 @@ class LoginScreen extends StatelessWidget {
             
                 // Login Button
                appButton("Login",  isLoading: loginProvider.isLoading,     () {
-         loginProvider.login(context,provider.selectedState);
+         loginProvider.login(context,provider.selectedState,  provider.usStates);
 }),
                 SizedBox(height: 20.h),
             
@@ -133,18 +133,30 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    socialButton("Apple",Icons.apple,() {
-         loginProvider.signInWithApple(context);
-}),
+//                     socialButton("Apple",Icons.apple,() {
+//          loginProvider.signInWithApple(context);
+
+
+// }),
                     SizedBox(width: 16.w),
                     socialButton("Google",Icons.g_mobiledata,() {
-        // loginProvider.signInWithGoogle(context);
+        loginProvider.signInWithGoogle(context);
 }),
                    
                   ],
                 ),
+                       TextButton(
+                  onPressed: () {
+                    // Continue as Guest action
+                    Navigator.pushReplacementNamed(context, '/bottomNavContainer');
+                  },
+                  child:  Center(child: Text('Continue as Guest',
+                      style: AppTheme.caption.copyWith(fontSize: 14,color: AppTheme.buttonColor),
+                  )),
+                ),
+
                 SizedBox(height: MediaQuery.of(context).size.height*0.1),
-           
+         
                 // Bottom Text
                 InkWell(
                   onTap: (){

@@ -114,6 +114,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _actionRow("Logout", () {
             profileProvider.signOutUser(context);
           }),
+           _divider(),
+          _actionRow("Delete Account", () {
+            profileProvider.deleteFirebaseAccount(context);
+          }),
         ],
       ),
     );

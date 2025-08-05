@@ -27,7 +27,7 @@ class _PlaylistWebViewPageState extends State<PlaylistWebViewPage> {
           onPageFinished: (_) => provider.setPlayListLoading(false),
         ),
       )
-      ..loadRequest(Uri.parse("https://foundsoulsofficial.com/playlists/"));
+      ..loadRequest(Uri.parse("https://foundsoulsofficial.com/app-playlists/"));
   }
 
   @override

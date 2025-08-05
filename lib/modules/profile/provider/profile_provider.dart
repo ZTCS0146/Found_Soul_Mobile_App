@@ -2,10 +2,12 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:found_soul_mobile_app/modules/login_signup_module/providers/signup_provider.dart';
 import 'package:found_soul_mobile_app/util/shared_preference.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dart:io';
@@ -34,7 +36,7 @@ class ProfileProvider extends ChangeNotifier {
   File? get imageFile => _imageFile;
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  String selectedGender ="Female";
+  String selectedGender ="";
   final List<String> genders = ['Male', 'Female', 'Other'];
   /// Pick image from gallery or camera
   Future<void> pickImage(ImageSource source, {void Function(File image)? onImagePicked}) async {
@@ -177,6 +179,12 @@ Future<void> updateUserProfile(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('userId');
        await removeEmail();
+nameController.text="";
+emailController.text="";
+selectedGender='';
+Provider.of<SignUpProvider>(context, listen: false).clearSelectedState();
+
+// Provider.of<SignUpProvider>(context).clearSelectedState();
 
     // 4.  Navigate to login or onboarding screen
     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
@@ -190,6 +198,52 @@ Future<void> updateUserProfile(BuildContext context) async {
     notifyListeners(); // Stop loader
   }
 }
+
+/// Delete Firebase account
+Future<void> deleteFirebaseAccount(BuildContext context) async {
+  try {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No user is currently logged in.')),
+      );
+      return;
+    }
+
+    // Attempt to delete the account
+    await user.delete();
+
+    // Clear stored data
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear(); // Clears all saved keys
+    await removeEmail();
+   ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please log in again to delete your account.'),
+        ),
+      );
+    // Navigate to login/onboarding
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'requires-recent-login') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please log in again to delete your account.'),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Account deletion failed: ${e.message}')),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error deleting account: ${e.toString()}')),
+    );
+  }
+}
+
 
 }
 

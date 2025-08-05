@@ -17,6 +17,7 @@ import 'package:found_soul_mobile_app/modules/login_signup_module/screens/forgot
 import 'package:found_soul_mobile_app/modules/login_signup_module/screens/login.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/screens/signup.dart';
 import 'package:found_soul_mobile_app/modules/login_signup_module/screens/verify_email.dart';
+import 'package:found_soul_mobile_app/modules/notification_module/provider/notification_model.dart';
 import 'package:found_soul_mobile_app/modules/notification_module/provider/notification_provider.dart';
 import 'package:found_soul_mobile_app/modules/notification_module/screens/notification.dart';
 import 'package:found_soul_mobile_app/modules/profile/provider/changepwd_provider.dart';
@@ -28,6 +29,8 @@ import 'package:found_soul_mobile_app/modules/splash_module/screens/onboarding.d
 import 'package:found_soul_mobile_app/modules/splash_module/screens/splash.dart';
 import 'package:found_soul_mobile_app/theme/app_theme.dart';
 import 'package:found_soul_mobile_app/util/navigation_service.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 // import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -44,8 +47,11 @@ void main() async {
   await Firebase.initializeApp(
     // options: DefaultFirebaseOptions.currentPlatform, // ✅ use this!
   );
-   initOneSignal();
+   await Hive.initFlutter();
+  Hive.registerAdapter(MyNotificationAdapter());
+  await Hive.openBox<MyNotification>('notifications');
 
+  await initOneSignal();
 
     //  await Firebase.initializeApp(); // This might fail if config files are missing
   } catch (e) {
@@ -69,37 +75,125 @@ void main() async {
     ),
   );
 }
+
+
+
 Future<void> initOneSignal() async {
-  OneSignal.Debug.setLogLevel(OSLogLevel.verbose); // Optional: useful for debugging
+  try {
+    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
-  OneSignal.initialize("bb4fb296-3956-4d55-985e-fa52d9d4b795");
+    OneSignal.initialize("bb4fb296-3956-4d55-985e-fa52d9d4b795");
+    await OneSignal.Notifications.requestPermission(true);
 
-  await OneSignal.Notifications.requestPermission(true);
+    final notificationBox = Hive.box<MyNotification>('notifications');
 
-  // Foreground notification handler
-  OneSignal.Notifications.addForegroundWillDisplayListener((event) {
-    event.preventDefault(); // Prevent default display
-    // OneSignal.Notifications.displayNotification(event.notification);
-    print("Foreground Notification: ${event.notification.jsonRepresentation()}");
-  });
+    // Foreground notification handler
+    OneSignal.Notifications.addForegroundWillDisplayListener((event) async {
+      try {
+        print("📩 Foreground notification received.");
 
-  // Notification click handler
-  OneSignal.Notifications.addClickListener((event) {
-    print("Notification Clicked: ${event.notification.jsonRepresentation()}");
+        // Stop auto display
+        event.preventDefault();
 
-    // Ex  final imageUrl = event.notification.bigPicture ??
-                   event.notification.additionalData?['image'];
-    NavigationService.navigatorKey.currentState?.pushNamed(
-      '/notification',
-    arguments: {
- "title": event.notification.title,
-          "message": event.notification.body,
-          "time": DateTime.now().toLocal().toString(),
-          "image": null, // Add image if you have any in additionalData
-  },
-    );
-  });
+        final notification = event.notification;
+        if (notification == null) {
+          print("⚠ Foreground: Notification is null");
+          return;
+        }
+
+        // Create notification object
+        final newNotification = MyNotification(
+          title: notification.title ?? 'No Title',
+          body: notification.body ?? 'No Body',
+          receivedAt: DateTime.now(),
+          imageUrl: notification.bigPicture ?? notification.additionalData?['image'],
+        );
+
+        // Save to Hive
+        await notificationBox.add(newNotification);
+        print("✅ Notification saved to Hive");
+
+        // Navigate immediately to NotificationScreen
+        NavigationService.navigatorKey.currentState?.pushNamed('/notification');
+
+      } catch (e, stack) {
+        print("❌ Error saving foreground notification: $e");
+        print(stack);
+      }
+    });
+
+    // Click handler for background / killed state
+    OneSignal.Notifications.addClickListener((event) async {
+      try {
+        print("🖱 Notification clicked.");
+
+        final notification = event.notification;
+        if (notification == null) {
+          print("⚠ Click: Notification is null");
+          return;
+        }
+
+        // Create and save notification
+        final newNotification = MyNotification(
+          title: notification.title ?? 'No Title',
+          body: notification.body ?? 'No Body',
+          receivedAt: DateTime.now(),
+          imageUrl: notification.bigPicture ?? notification.additionalData?['image'],
+        );
+
+        await notificationBox.add(newNotification);
+        print("✅ Notification saved to Hive from click");
+
+        // Navigate to NotificationScreen
+        NavigationService.navigatorKey.currentState?.pushNamed('/notification');
+
+      } catch (e, stack) {
+        print("❌ Error handling notification click: $e");
+        print(stack);
+      }
+    });
+
+    print("✅ OneSignal initialized successfully.");
+  } catch (e, stack) {
+    print("❌ OneSignal initialization failed: $e");
+    print(stack);
+  }
 }
+
+
+
+
+// Future<void> initOneSignal() async {
+//   OneSignal.Debug.setLogLevel(OSLogLevel.verbose); // Optional: useful for debugging
+
+//   OneSignal.initialize("bb4fb296-3956-4d55-985e-fa52d9d4b795");
+
+//   await OneSignal.Notifications.requestPermission(true);
+
+//   // Foreground notification handler
+//   OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+//     event.preventDefault(); // Prevent default display
+//     // OneSignal.Notifications.displayNotification(event.notification);
+//     print("Foreground Notification: ${event.notification.jsonRepresentation()}");
+//   });
+
+//   // Notification click handler
+//   OneSignal.Notifications.addClickListener((event) {
+//     print("Notification Clicked: ${event.notification.jsonRepresentation()}");
+
+//     // Ex  final imageUrl = event.notification.bigPicture ??
+//                    event.notification.additionalData?['image'];
+//     NavigationService.navigatorKey.currentState?.pushNamed(
+//       '/notification',
+//     arguments: {
+//  "title": event.notification.title,
+//           "message": event.notification.body,
+//           "time": DateTime.now().toLocal().toString(),
+//           "image": null, // Add image if you have any in additionalData
+//   },
+//     );
+//   });
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

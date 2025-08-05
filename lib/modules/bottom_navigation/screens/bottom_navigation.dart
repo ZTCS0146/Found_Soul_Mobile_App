@@ -27,13 +27,7 @@ class _BottomNavContainerState extends State<BottomNavContainer> {
     PlaylistWebViewPage(),
     ProfileScreen()
   ];
-  final List<String> titles = [
-    'Events',
-    'Shop',
-    'Map',
-    'Playlist',
-    'Profile',
-  ];
+
   void onItemTapped(int index) {
     setState(() {
       currentIndex = index;
@@ -65,7 +59,7 @@ class CustomBottomNavBar extends StatelessWidget {
   get titles => [
         'Get Passes',
         'Shop',
-        'Rave Location',
+        'Location',
         'Playlists',
         'Profile',
       ];
@@ -81,7 +75,9 @@ class CustomBottomNavBar extends StatelessWidget {
     
     ];
 
-    return Container(
+    return SafeArea(
+  top: false, // we only care about bottom insets
+  child: Container(
       height: 70.h,
       color: Colors.black,
       child: Row(
@@ -124,7 +120,7 @@ class CustomBottomNavBar extends StatelessWidget {
           );
         }),
       ),
-    );
+    ));
   }
 }
 
