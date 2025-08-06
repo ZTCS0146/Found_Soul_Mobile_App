@@ -54,20 +54,20 @@ class SignupScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 16.h),
 
-                      CustomTextField(
-                        hintText: "Phone",
-                        controller: provider.phoneController,
-                        keyboardType: TextInputType.phone,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return "Phone is required";
-                          } else if (!RegExp(r'^\d{10}$').hasMatch(value)) {
-                            return "Phone must be 10 digits";
-                          }
-                          return null;
-                        },
-                      ),
-                      SizedBox(height: 16.h),
+                      // CustomTextField(
+                      //   hintText: "Phone",
+                      //   controller: provider.phoneController,
+                      //   keyboardType: TextInputType.phone,
+                      //   validator: (value) {
+                      //     if (value == null || value.trim().isEmpty) {
+                      //       return "Phone is required";
+                      //     } else if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+                      //       return "Phone must be 10 digits";
+                      //     }
+                      //     return null;
+                      //   },
+                      // ),
+                      // SizedBox(height: 16.h),
 
                       CustomTextField(
                         hintText: "Email",
@@ -85,15 +85,15 @@ class SignupScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 16.h),
 
-                      CustomTextField(
-                        hintText: "Gender",
-                        controller: provider.genderController,
-                        validator: (value) =>
-                            value == null || value.trim().isEmpty
-                                ? "Gender is required"
-                                : null,
-                      ),
-                      SizedBox(height: 16.h),
+                      // CustomTextField(
+                      //   hintText: "Gender",
+                      //   controller: provider.genderController,
+                      //   validator: (value) =>
+                      //       value == null || value.trim().isEmpty
+                      //           ? "Gender is required"
+                      //           : null,
+                      // ),
+                      // SizedBox(height: 16.h),
 CustomDropdownField(
           hintText: 'Select State',
           value: provider.selectedState,
